@@ -28,4 +28,5 @@
     <string name="male_radio_btn">Муж</string>
     <string name="female_radio_btn">Жен</string>
     <string name="register_btn">Зарегистрироваться</string>
+    <string name="reg_password_hint">Пароль</string>
 </resources>

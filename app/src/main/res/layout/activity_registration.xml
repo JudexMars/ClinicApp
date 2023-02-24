@@ -81,6 +81,17 @@
         android:layout_height="@dimen/button_height"
         android:text="@string/register_btn"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/emailTextField"/>
+        android:layout_below="@id/passwordTextField"/>
+
+    <EditText
+        android:id="@+id/passwordTextField"
+        android:layout_width="355dp"
+        android:layout_height="61dp"
+        android:paddingHorizontal="20dp"
+        android:inputType="textPassword"
+        android:hint="@string/reg_password_hint"
+        android:layout_below="@id/emailTextField"
+        android:layout_centerHorizontal="true"
+        android:autofillHints="password"/>
 
 </android.widget.RelativeLayout>
