@@ -77,8 +77,8 @@
 
     <Button
         android:id="@+id/registerBtn"
-        android:layout_width="300dp"
-        android:layout_height="75dp"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
         android:text="@string/register_btn"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/emailTextField"/>
