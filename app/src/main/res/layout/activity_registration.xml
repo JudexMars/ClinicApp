@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Registration">
+
+    <TextView
+        android:id="@+id/registrationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-thin"
+        android:text="@string/registration_label"
+        android:textAlignment="center"
+        android:textSize="48sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
+
+    <EditText
+        android:id="@+id/nameTextField"
+        android:layout_width="355dp"
+        android:layout_height="61dp"
+        android:paddingHorizontal="20dp"
+        android:inputType="textPersonName"
+        android:hint="@string/reg_name_hint"
+        android:layout_below="@id/registrationLabel"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:autofillHints="name"/>
+
+    <EditText
+        android:id="@+id/birthDateTextField"
+        android:layout_width="wrap_content"
+        android:layout_height="61dp"
+        android:layout_below="@id/nameTextField"
+        android:autofillHints="emailAddress"
+        android:layout_alignStart="@id/nameTextField"
+        android:hint="@string/reg_birthdate_hint"
+
+        android:inputType="date"
+
+        android:paddingHorizontal="20dp" />
+
+    <EditText
+        android:id="@+id/emailTextField"
+        android:layout_width="355dp"
+        android:layout_height="61dp"
+        android:paddingHorizontal="20dp"
+        android:inputType="textEmailAddress"
+        android:hint="@string/reg_email_hint"
+        android:layout_below="@id/birthDateTextField"
+        android:layout_centerHorizontal="true"
+        android:autofillHints="emailAddress"/>
+
+    <RadioGroup
+        android:id="@+id/genderRadioBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/birthDateTextField"
+        android:layout_toEndOf="@id/birthDateTextField"
+        android:layout_below="@id/nameTextField"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/maleRadioBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/male_radio_btn" />
+        <RadioButton
+            android:id="@+id/femaleRadioBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/female_radio_btn" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="300dp"
+        android:layout_height="75dp"
+        android:text="@string/register_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/emailTextField"/>
+
+</android.widget.RelativeLayout>

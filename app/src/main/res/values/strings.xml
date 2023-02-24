@@ -16,4 +16,16 @@
     <string name="login_button_text">Войти</string>
     <string name="login_label">Клиника</string>
     <string name="signup_button_text">У меня нет профиля</string>
+    <string name="title_activity_home">home</string>
+    <string name="appointments_label">Записи</string>
+    <string name="no_appointments_text">У вас пока нет ни одной записи</string>
+    <string name="new_appointment_btn">Записаться на приём</string>
+    <string name="home_smile_desc">:)</string>
+    <string name="registration_label">Регистрация</string>
+    <string name="reg_email_hint">Электронная почта</string>
+    <string name="reg_name_hint">ФИО</string>
+    <string name="reg_birthdate_hint">Дата рождения</string>
+    <string name="male_radio_btn">Муж</string>
+    <string name="female_radio_btn">Жен</string>
+    <string name="register_btn">Зарегистрироваться</string>
 </resources>
