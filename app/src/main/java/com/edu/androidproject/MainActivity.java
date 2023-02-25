@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    // We're getting the results from signup activity here
     ActivityResultLauncher<Intent> mStartForRegData = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
