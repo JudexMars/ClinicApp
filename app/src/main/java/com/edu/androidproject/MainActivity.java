@@ -53,7 +53,15 @@ public class MainActivity extends AppCompatActivity {
         Button loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener((View v) -> {
             Log.i(TAG, "Кнопка входа была нажата");
-            startActivity(new Intent(this, Home.class));
+            if (((EditText)findViewById(R.id.usernameText)).getText().toString() == "admin")
+            {
+                if (((EditText)findViewById(R.id.passwordText)).getText().toString() == "admin") {
+                    startActivity(new Intent(this, Home.class));
+                }
+            }
+            else {
+                Log.w(TAG, "Неудачная попытка входа");
+            }
         });
     }
 
