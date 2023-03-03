@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -32,6 +33,9 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                     binding.usernameText.setText(email);
                     binding.passwordText.setText(password);
                 });
+
+        Toast.makeText(getActivity(), "Login: CREATED", Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Login: CREATED");
     }
 
     @Override
@@ -39,6 +43,37 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                              Bundle savedInstanceState) {
         binding = FragmentLoginScreenBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Toast.makeText(getActivity(), "Login: STARTED", Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Login: STARTED");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Toast.makeText(getActivity(), "Login: RESUMED", Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Login: RESUMED");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(getActivity(), "Login: CREATED", Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Login: CREATED");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Toast.makeText(getActivity(), "Login: DESTROYED", Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Login: DESTROYED");
     }
 
     @Override
