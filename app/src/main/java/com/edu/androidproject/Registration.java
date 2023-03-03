@@ -11,16 +11,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.edu.androidproject.databinding.ActivityRegistrationBinding;
+
 public class Registration extends AppCompatActivity {
+
+    private ActivityRegistrationBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+        binding = ActivityRegistrationBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        ((EditText)findViewById(R.id.emailTextField)).setText(getIntent().getExtras().getString("email"));
+        binding.emailTextField.setText(getIntent().getExtras().getString("email"));
 
-        Button signup_button = (Button) findViewById(R.id.registerBtn);
+        Button signup_button = binding.registerBtn;
         signup_button.setOnClickListener((View v) -> {
             Log.i("Registration", "Была нажата кнопка регистрации");
             Intent input = getIntent();
@@ -28,8 +33,8 @@ public class Registration extends AppCompatActivity {
             String email = input.getExtras().getString("email");
 
             Bundle resBundle = new Bundle();
-            resBundle.putString("email", ((EditText)(findViewById(R.id.emailTextField))).getText().toString());
-            resBundle.putString("password", ((EditText)(findViewById(R.id.passwordTextField))).getText().toString());
+            resBundle.putString("email", binding.emailTextField.getText().toString());
+            resBundle.putString("password", binding.passwordTextField.getText().toString());
 
             res.putExtras(resBundle);
 

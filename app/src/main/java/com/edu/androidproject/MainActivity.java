@@ -14,12 +14,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.edu.androidproject.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private ActivityMainBinding binding;
 
     // We're getting the results from signup activity here
     ActivityResultLauncher<Intent> mStartForRegData = registerForActivityResult(
@@ -30,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent intent = result.getData();
                         Bundle res = intent.getExtras();
-                        ((EditText)findViewById(R.id.usernameText)).setText(res.getString("email"));
-                        ((EditText)findViewById(R.id.passwordText)).setText(res.getString("password"));
+                        binding.usernameText.setText(res.getString("email"));
+                        binding.passwordText.setText(res.getString("password"));
                     }
                 }
             }
@@ -40,23 +44,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Toast.makeText(this.getApplicationContext(), "onCreate()", Toast.LENGTH_SHORT).show();
         Log.i(TAG, "Активность создана");
 
-        Button signupButton = (Button)findViewById(R.id.signUpButton);
+        Button signupButton = binding.signUpButton;
         signupButton.setText(R.string.signup_button_text);
 
-        ImageView caduceus = (ImageView)findViewById(R.id.caduceusImage);
+        ImageView caduceus = binding.caduceusImage;
         caduceus.setImageResource(R.drawable.caduceus);
 
-        Button loginButton = (Button) findViewById(R.id.loginButton);
+        Button loginButton = binding.loginButton;
         loginButton.setOnClickListener((View v) -> {
             Log.i(TAG, "Кнопка входа была нажата");
-            if (((EditText)findViewById(R.id.usernameText)).getText().toString() == "admin")
+            if (binding.usernameText.getText().toString() == "admin")
             {
-                if (((EditText)findViewById(R.id.passwordText)).getText().toString() == "admin") {
+                if (binding.passwordText.getText().toString() == "admin") {
                     startActivity(new Intent(this, Home.class));
                 }
             }
@@ -70,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "Кнопка регистрации была нажата");
 
         Intent intent = new Intent(this, Registration.class);
-        intent.putExtra("email", ((EditText)findViewById(R.id.usernameText)).getText().toString());
+        intent.putExtra("email", binding.usernameText.getText().toString());
         mStartForRegData.launch(intent);
     }
 
