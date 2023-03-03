@@ -25,22 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private ActivityMainBinding binding;
 
-    // We're getting the results from signup activity here
-    ActivityResultLauncher<Intent> mStartForRegData = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent intent = result.getData();
-                        Bundle res = intent.getExtras();
-                        binding.usernameText.setText(res.getString("email"));
-                        binding.passwordText.setText(res.getString("password"));
-                    }
-                }
-            }
-    );
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,35 +34,14 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this.getApplicationContext(), "onCreate()", Toast.LENGTH_SHORT).show();
         Log.i(TAG, "Активность создана");
 
-        Button signupButton = binding.signUpButton;
-        signupButton.setText(R.string.signup_button_text);
-
-        ImageView caduceus = binding.caduceusImage;
-        caduceus.setImageResource(R.drawable.caduceus);
-
-        Button loginButton = binding.loginButton;
-        loginButton.setOnClickListener((View v) -> {
-            Log.i(TAG, "Кнопка входа была нажата");
-            if (binding.usernameText.getText().toString() == "admin")
-            {
-                if (binding.passwordText.getText().toString() == "admin") {
-                    startActivity(new Intent(this, Home.class));
-                }
-            }
-            else {
-                Log.w(TAG, "Неудачная попытка входа");
-            }
-        });
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragment_container_view,
+                            LoginScreenFragment.class, null)
+                    .commit();
+        }
     }
-
-    public void signUp_onClick(View v ) {
-        Log.i(TAG, "Кнопка регистрации была нажата");
-
-        Intent intent = new Intent(this, Registration.class);
-        intent.putExtra("email", binding.usernameText.getText().toString());
-        mStartForRegData.launch(intent);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();

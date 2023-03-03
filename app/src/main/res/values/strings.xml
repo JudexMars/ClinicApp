@@ -29,4 +29,6 @@
     <string name="female_radio_btn">Жен</string>
     <string name="register_btn">Зарегистрироваться</string>
     <string name="reg_password_hint">Пароль</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
