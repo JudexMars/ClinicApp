@@ -1,5 +1,6 @@
 package com.edu.androidproject;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,11 +32,16 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
+    @SuppressWarnings("ConstantConditions")
     public void onViewCreated(@NonNull View view, Bundle savedInstance) {
         super.onViewCreated(view, savedInstance);
 
         Button loginButton = binding.newAppointmentBtn;
         loginButton.setOnClickListener((View v) -> Log.i(TAG, "Была нажата кнопка создания записи"));
+
+        String userName = this.getArguments().getString("name");
+        binding.welcomeTextView.setText("Добро пожаловать, " + userName);
     }
 }

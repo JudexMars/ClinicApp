@@ -12,6 +12,19 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/welcomeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Welcome, somebody!"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/noAppointmentsTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            tools:ignore="HardcodedText" />
+
+        <TextView
             android:id="@+id/appointmentsLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,9 +41,10 @@
             android:id="@+id/noAppointmentsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="@string/no_appointments_text"
-            android:textSize="20sp"
             android:textColor="@color/pink_gray"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,13 +65,13 @@
             android:id="@+id/imageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="48dp"
+            android:contentDescription="@string/home_smile_desc"
             app:layout_constraintBottom_toTopOf="@+id/noAppointmentsTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/smile"
-            app:tint="@color/purple_500"
-            android:contentDescription="@string/home_smile_desc" />
+            app:tint="@color/purple_500" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

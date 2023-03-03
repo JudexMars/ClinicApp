@@ -45,6 +45,7 @@ public class RegistrationFragment extends Fragment {
 
                 res.putString("email", binding.emailTextField.getText().toString());
                 res.putString("password", binding.passwordTextField.getText().toString());
+                res.putString("name", binding.nameTextField.getText().toString());
 
                 getParentFragmentManager().setFragmentResult("userData", res);
                 getParentFragmentManager().popBackStack();

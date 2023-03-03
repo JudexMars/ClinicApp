@@ -17,10 +17,15 @@ import androidx.lifecycle.LifecycleObserver;
 
 import com.edu.androidproject.databinding.FragmentLoginScreenBinding;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class LoginScreenFragment extends Fragment implements LifecycleObserver {
 
     private static final String TAG = "Login screen";
     private FragmentLoginScreenBinding binding;
+
+    private Map<String, Bundle> users = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,8 +35,14 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                 this, (requestKey, result) -> {
                     String email = result.getString("email");
                     String password = result.getString("password");
+                    String name = result.getString("name");
                     binding.usernameText.setText(email);
                     binding.passwordText.setText(password);
+                    Bundle newBundle = new Bundle();
+
+                    newBundle.putString("password", password);
+                    newBundle.putString("name", name);
+                    users.put(email, newBundle);
                 });
 
         Toast.makeText(getActivity(), "Login: CREATED", Toast.LENGTH_SHORT).show();
@@ -92,11 +103,18 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
             Log.i(TAG, "Кнопка входа была нажата");
             Log.i(TAG, "Username: " + binding.usernameText.getText().toString());
             Log.i(TAG, "Password: " + binding.passwordText.getText().toString());
-            if (binding.usernameText.getText().toString().equals("admin"))
+
+            Bundle userBundle = users.get(binding.usernameText.getText().toString());
+
+            if (userBundle != null)
             {
-                if (binding.passwordText.getText().toString().equals("admin")) {
+                Log.i(TAG, "Parol" + userBundle.getString("password"));
+                if (binding.passwordText.getText().toString().equals(userBundle.getString("password"))) {
 
                     Fragment fragment = new HomeFragment();
+
+                    fragment.setArguments(userBundle);
+
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container_view, fragment);
