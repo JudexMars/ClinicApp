@@ -4,10 +4,12 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -82,5 +84,26 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Toast.makeText(this.getApplicationContext(), "onDestroy()", Toast.LENGTH_SHORT).show();
         Log.w(TAG, "Активность уничтожена");
+    }
+
+    public final int PERMISSION_REQUEST_CODE = 0;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE &&
+                grantResults.length == 1) {
+            if (
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+                Log.i(TAG, "Разрешение получено: " + requestCode);
+            }
+            else {
+                Log.w(TAG, "Разрешение отказано: " + requestCode);
+            }
+        }
+        super.onRequestPermissionsResult(
+                requestCode, permissions, grantResults
+        );
     }
 }
