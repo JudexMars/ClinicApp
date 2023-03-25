@@ -3,7 +3,9 @@ package com.edu.androidproject;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -14,6 +16,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +34,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = new Intent(getActivity(), SampleService.class);
+        getActivity().startService(intent);
     }
 
     @Override
@@ -40,6 +45,8 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+
+    private final String CHANNEL_ID = "AppointmentNotification";
     @SuppressLint("SetTextI18n")
     @Override
     @SuppressWarnings("ConstantConditions")
@@ -64,7 +71,7 @@ public class HomeFragment extends Fragment {
         binding.welcomeTextView.setText("Добро пожаловать, " + userName);
     }
 
-    private final String CHANNEL_ID = "AppointmentNotification";
+
 
     private void showNotification() {
         if (ContextCompat.checkSelfPermission(getContext(),
