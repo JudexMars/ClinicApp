@@ -1,4 +1,4 @@
-package com.edu.androidproject;
+package com.edu.androidproject.ui.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -6,11 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.edu.androidproject.databinding.FragmentRegistrationBinding;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class RegistrationFragment extends Fragment {
 
@@ -47,7 +53,20 @@ public class RegistrationFragment extends Fragment {
                 res.putString("password", binding.passwordTextField.getText().toString());
                 res.putString("name", binding.nameTextField.getText().toString());
 
-                getParentFragmentManager().setFragmentResult("userData", res);
+                int checkedRadioId = binding.genderRadioBtn.getCheckedRadioButtonId();
+                String gender = ((RadioButton) view.findViewById(checkedRadioId)).getText().toString();
+
+                res.putString("sex", gender);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.US);
+                try {
+                    Date birthdate = sdf.parse(binding.birthDateTextField.getText().toString());
+                    res.putSerializable("birthdate", birthdate);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+
+            getParentFragmentManager().setFragmentResult("userData", res);
                 getParentFragmentManager().popBackStack();
         });
     }

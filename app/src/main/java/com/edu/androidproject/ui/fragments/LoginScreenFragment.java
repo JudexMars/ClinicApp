@@ -1,4 +1,4 @@
-package com.edu.androidproject;
+package com.edu.androidproject.ui.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,17 +15,22 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LifecycleObserver;
 
+import com.edu.androidproject.R;
+import com.edu.androidproject.data.UserAccount;
 import com.edu.androidproject.databinding.FragmentLoginScreenBinding;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 public class LoginScreenFragment extends Fragment implements LifecycleObserver {
 
     private static final String TAG = "Login screen";
     private FragmentLoginScreenBinding binding;
-
-    private Map<String, Bundle> users = new HashMap<>();
+    private final Set<UserAccount> users = new HashSet<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,17 +41,17 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                     String email = result.getString("email");
                     String password = result.getString("password");
                     String name = result.getString("name");
+                    Date birthdate = (Date) result.get("birthdate");
+                    String gender = result.getString("sex");
                     binding.usernameText.setText(email);
                     binding.passwordText.setText(password);
-                    Bundle newBundle = new Bundle();
 
-                    newBundle.putString("password", password);
-                    newBundle.putString("name", name);
-                    users.put(email, newBundle);
+                    UserAccount user = new UserAccount(name, birthdate,
+                            gender == "Муж" ? UserAccount.Sex.MALE : UserAccount.Sex.FEMALE, email,
+                            password);
+
+                    users.add(user);
                 });
-
-        Toast.makeText(getActivity(), "Login: CREATED", Toast.LENGTH_SHORT).show();
-        Log.i(TAG, "Login: CREATED");
     }
 
     @Override
@@ -59,32 +64,21 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
     @Override
     public void onStart() {
         super.onStart();
-
-        Toast.makeText(getActivity(), "Login: STARTED", Toast.LENGTH_SHORT).show();
-        Log.i(TAG, "Login: STARTED");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        Toast.makeText(getActivity(), "Login: RESUMED", Toast.LENGTH_SHORT).show();
-        Log.i(TAG, "Login: RESUMED");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Toast.makeText(getActivity(), "Login: CREATED", Toast.LENGTH_SHORT).show();
-        Log.i(TAG, "Login: CREATED");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        Toast.makeText(getActivity(), "Login: DESTROYED", Toast.LENGTH_SHORT).show();
-        Log.i(TAG, "Login: DESTROYED");
     }
 
     @Override
@@ -104,16 +98,18 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
             Log.i(TAG, "Username: " + binding.usernameText.getText().toString());
             Log.i(TAG, "Password: " + binding.passwordText.getText().toString());
 
-            Bundle userBundle = users.get(binding.usernameText.getText().toString());
+            Optional<UserAccount> user = users.stream()
+                    .filter(u -> u.getEmail().equals(binding.usernameText.getText().toString()))
+                    .findAny();
 
-            if (userBundle != null)
+            if (user.isPresent())
             {
-                Log.i(TAG, "Parol" + userBundle.getString("password"));
-                if (binding.passwordText.getText().toString().equals(userBundle.getString("password"))) {
+                if (binding.passwordText.getText().toString().equals(user.get().getPassword())) {
 
                     Fragment fragment = new HomeFragment();
-
-                    fragment.setArguments(userBundle);
+                    Bundle args = new Bundle();
+                    args.putSerializable("user", user.get());
+                    fragment.setArguments(args);
 
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

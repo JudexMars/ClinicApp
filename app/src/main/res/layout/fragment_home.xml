@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeFragment">
+    tools:context=".ui.fragments.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,6 +72,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/smile"
             app:tint="@color/purple_500" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/apptListView"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_width="300dp"
+            android:layout_height="400dp"
+            app:layout_constraintBottom_toTopOf="@+id/newAppointmentBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appointmentsLabel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
