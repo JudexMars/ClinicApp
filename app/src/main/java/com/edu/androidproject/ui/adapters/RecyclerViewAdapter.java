@@ -1,6 +1,8 @@
 package com.edu.androidproject.ui.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.timeTextView.setText(MessageFormat.format("{0}:{1}", appointment.getHour(),
                 (minute > 9 ? minute : "0" + minute)));
         holder.drTextView.setText(appointment.getDr());
+        holder.itemView.setOnClickListener(v -> {
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Информация")
+                    .setMessage("Дата: " + holder.dateTextView.getText().toString() + ", время: "
+                            + holder.timeTextView.getText().toString() + ", врач: "
+                            + holder.drTextView.getText().toString())
+                    .setPositiveButton(android.R.string.ok, null)
+                    .show();
+        });
     }
 
     @Override
