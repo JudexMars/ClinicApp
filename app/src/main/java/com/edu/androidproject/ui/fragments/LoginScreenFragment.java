@@ -7,22 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.edu.androidproject.R;
-import com.edu.androidproject.data.UserAccount;
+import com.edu.androidproject.data.model.UserAccount;
 import com.edu.androidproject.databinding.FragmentLoginScreenBinding;
+import com.edu.androidproject.ui.viewmodels.UserAccountsViewModel;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,11 +29,14 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
 
     private static final String TAG = "Login screen";
     private FragmentLoginScreenBinding binding;
-    private final Set<UserAccount> users = new HashSet<>();
+    //private final Set<UserAccount> users = new HashSet<>();
+    UserAccountsViewModel userAccountsViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        userAccountsViewModel = new ViewModelProvider(this).get(UserAccountsViewModel.class);
 
         getParentFragmentManager().setFragmentResultListener("userData",
                 this, (requestKey, result) -> {
@@ -50,7 +52,7 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                             gender == "Муж" ? UserAccount.Sex.MALE : UserAccount.Sex.FEMALE, email,
                             password);
 
-                    users.add(user);
+                    userAccountsViewModel.add(user);
                 });
     }
 
@@ -98,7 +100,7 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
             Log.i(TAG, "Username: " + binding.usernameText.getText().toString());
             Log.i(TAG, "Password: " + binding.passwordText.getText().toString());
 
-            Optional<UserAccount> user = users.stream()
+            Optional<UserAccount> user = userAccountsViewModel.getAccounts().getValue().stream()
                     .filter(u -> u.getEmail().equals(binding.usernameText.getText().toString()))
                     .findAny();
 

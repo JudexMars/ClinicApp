@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edu.androidproject.R;
-import com.edu.androidproject.data.Appointment;
+import com.edu.androidproject.data.model.Appointment;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package com.edu.androidproject.data;
+package com.edu.androidproject.data.model;
 
 import java.io.Serializable;
 import java.util.Date;

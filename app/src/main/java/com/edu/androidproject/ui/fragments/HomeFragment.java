@@ -19,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -31,10 +32,11 @@ import android.Manifest;
 import android.widget.Spinner;
 
 import com.edu.androidproject.R;
-import com.edu.androidproject.data.Appointment;
-import com.edu.androidproject.data.UserAccount;
+import com.edu.androidproject.data.model.Appointment;
+import com.edu.androidproject.data.model.UserAccount;
 import com.edu.androidproject.ui.adapters.RecyclerViewAdapter;
 import com.edu.androidproject.databinding.FragmentHomeBinding;
+import com.edu.androidproject.ui.viewmodels.ApptsViewModel;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -50,16 +52,20 @@ public class HomeFragment extends Fragment {
     private UserAccount user;
     private RecyclerView apptList;
     private RecyclerViewAdapter apptListAdapter;
-    private ArrayList<Appointment> appointments = new ArrayList<>();
+    //private ArrayList<Appointment> appointments = new ArrayList<>();
 
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
     private Button dateButton;
     private Button timeButton;
 
+    private ApptsViewModel apptsViewModel;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        apptsViewModel = new ViewModelProvider(this).get(ApptsViewModel.class);
     }
 
     @Override
@@ -99,8 +105,12 @@ public class HomeFragment extends Fragment {
         binding.welcomeTextView.setText("Добро пожаловать, " + userName);
 
         apptList = view.findViewById(R.id.apptListView);
-        apptListAdapter = new RecyclerViewAdapter(getContext(), appointments);
+        apptListAdapter = new RecyclerViewAdapter(getContext(),
+                apptsViewModel.getAppts().getValue());
         apptList.setAdapter(apptListAdapter);
+
+        apptsViewModel.getAppts().observe(getViewLifecycleOwner(),
+                appts -> apptListAdapter.notifyDataSetChanged());
 
         initDatePicker();
         initTimePicker();
@@ -172,8 +182,7 @@ public class HomeFragment extends Fragment {
             cal.set(Calendar.YEAR, year);
             cal.set(Calendar.MONTH, month);
             cal.set(Calendar.DAY_OF_MONTH, day);
-            appointments.add(new Appointment(user, (String)spinner.getSelectedItem(), cal.getTime(), hour, minute));
-            apptListAdapter.notifyItemInserted(appointments.size() - 1);
+            apptsViewModel.add(new Appointment(user, (String)spinner.getSelectedItem(), cal.getTime(), hour, minute));
             binding.welcomeTextView.setVisibility(View.INVISIBLE);
             binding.imageView.setVisibility(View.INVISIBLE);
             binding.noAppointmentsTextView.setVisibility(View.INVISIBLE);
