@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment {
         DatePickerDialog.OnDateSetListener dateSetListener =
                 (datePicker, year, month, day) ->
                 {
-                    dateButton.setText(MessageFormat.format("{0}.{1}", day, month));
+                    dateButton.setText(MessageFormat.format("{0}.{1}", day, month + 1));
                     this.year = year;
                     this.month = month;
                     this.day = day;
