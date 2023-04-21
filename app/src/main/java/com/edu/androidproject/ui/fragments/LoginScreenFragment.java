@@ -45,6 +45,7 @@ import java.io.Writer;
 import java.security.Permissions;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -52,7 +53,6 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
 
     private static final String TAG = "Login screen";
     private FragmentLoginScreenBinding binding;
-    //private final Set<UserAccount> users = new HashSet<>();
     UserAccountsViewModel userAccountsViewModel;
 
     @Override
@@ -72,10 +72,10 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                     binding.passwordText.setText(password);
 
                     UserAccount user = new UserAccount(name, birthdate,
-                            gender == "Муж" ? UserAccount.Sex.MALE : UserAccount.Sex.FEMALE, email,
+                            Objects.equals(gender, "Муж") ? UserAccount.Sex.MALE : UserAccount.Sex.FEMALE, email,
                             password);
 
-                    userAccountsViewModel.add(user);
+                    userAccountsViewModel.insert(user);
                 });
     }
 

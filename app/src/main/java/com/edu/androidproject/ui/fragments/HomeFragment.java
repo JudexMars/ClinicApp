@@ -114,6 +114,17 @@ public class HomeFragment extends Fragment {
 
         initDatePicker();
         initTimePicker();
+
+        debugUser(user);
+    }
+
+    private void debugUser(UserAccount user) {
+        Log.i(TAG, "Name:" + user.getName());
+        Log.i(TAG, "Birthdate:" + user.getBirthdate().toString());
+        Log.i(TAG, "Sex:" + user.getSex());
+        Log.i(TAG, "Email:" + user.getEmail());
+        Log.i(TAG, "Password:" + user.getPassword());
+
     }
 
     private void initDatePicker() {
