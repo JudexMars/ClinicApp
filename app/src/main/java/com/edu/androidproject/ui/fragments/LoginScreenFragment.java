@@ -3,7 +3,9 @@ package com.edu.androidproject.ui.fragments;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -114,21 +116,17 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
         if (!checkPermission()) requestPermission();
 
         if (firstLaunch) {
-            File rememberMeFile = new File(getContext().getFilesDir(), "user_specific");
-            try (BufferedReader reader = new BufferedReader(new FileReader(rememberMeFile))) {
-                String rememberedUsername = reader.readLine();
-                String rememberedPassword = reader.readLine();
+            SharedPreferences config = getContext()
+                    .getSharedPreferences("config", Context.MODE_PRIVATE);
 
-                binding.usernameText.setText(rememberedUsername);
-                binding.passwordText.setText(rememberedPassword);
+            String rememberedUsername = config.getString("username", "");
+            String rememberedPassword = config.getString("password", "");
 
-                firstLaunch = false;
-            }
-            catch (IOException e) {
-                Log.w(TAG, "user_specific file not found");
-            }
+            binding.usernameText.setText(rememberedUsername);
+            binding.passwordText.setText(rememberedPassword);
+
+            firstLaunch = false;
         }
-
 
         Button signupButton = binding.signUpButton;
         signupButton.setText(R.string.signup_button_text);
@@ -160,15 +158,12 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                         String rememberedUserName = binding.usernameText.getText().toString();
                         String rememberedPassword = binding.passwordText.getText().toString();
 
-                        File file = new File(getContext().getFilesDir(), "user_specific");
-                        try (Writer writer = new FileWriter(file)) {
-                            writer.write(rememberedUserName);
-                            writer.write("\n");
-                            writer.write(rememberedPassword);
-                        }
-                        catch (IOException e) {
-                            throw new RuntimeException();
-                        }
+                        SharedPreferences config = getActivity()
+                                .getSharedPreferences("config", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = config.edit();
+                        editor.putString("username", rememberedUserName);
+                        editor.putString("password", rememberedPassword);
+                        editor.apply();
                     }
 
                     if (checkPermission()) {
