@@ -1,12 +1,16 @@
 package com.edu.androidproject.ui.fragments;
 
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,28 +104,31 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
         super.onDestroy();
     }
 
+    boolean firstLaunch = true;
+
     @Override
     @SuppressWarnings("ConstantConditions")
     public void onViewCreated(@NonNull View view, Bundle savedInstance) {
         super.onViewCreated(view, savedInstance);
 
-        ActivityCompat.requestPermissions(getActivity(),
-                new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                },
-                10);
+        if (!checkPermission()) requestPermission();
 
-        File rememberMeFile = new File(getContext().getFilesDir(), "user_specific");
-        try (BufferedReader reader = new BufferedReader(new FileReader(rememberMeFile))) {
-            String rememberedUsername = reader.readLine();
-            String rememberedPassword = reader.readLine();
+        if (firstLaunch) {
+            File rememberMeFile = new File(getContext().getFilesDir(), "user_specific");
+            try (BufferedReader reader = new BufferedReader(new FileReader(rememberMeFile))) {
+                String rememberedUsername = reader.readLine();
+                String rememberedPassword = reader.readLine();
 
-            binding.usernameText.setText(rememberedUsername);
-            binding.passwordText.setText(rememberedPassword);
+                binding.usernameText.setText(rememberedUsername);
+                binding.passwordText.setText(rememberedPassword);
+
+                firstLaunch = false;
+            }
+            catch (IOException e) {
+                Log.w(TAG, "user_specific file not found");
+            }
         }
-        catch (IOException e) {
-            Log.w(TAG, "user_specific file not found");
-        }
+
 
         Button signupButton = binding.signUpButton;
         signupButton.setText(R.string.signup_button_text);
@@ -164,14 +171,14 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                         }
                     }
 
-                    if (1 == 1 || ContextCompat.checkSelfPermission(getContext(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            == PackageManager.PERMISSION_GRANTED) {
-                        File file = new File(Environment.getExternalStorageDirectory(), "ClinicExample.txt");
+                    if (checkPermission()) {
+                        File file = new File(Environment
+                                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+                                "ClinicExample.txt");
                         Date currentDate = new Date();
                         try (Writer writer = new FileWriter(file)) {
                             writer.write("Last login:");
-                            writer.write("a");
+                            writer.write(currentDate.toString());
                         }
                         catch (IOException e) {
                             Log.w(TAG, "IOException when writing external file");
@@ -179,8 +186,7 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                     }
                     else {
                         Log.w(TAG, "No external write permission");
-                        int requestCode = 1;
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
+                        requestPermission();
                     }
 
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -208,5 +214,31 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
+    }
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        }
+        return ContextCompat.checkSelfPermission(requireContext(), WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                Uri uri = Uri.fromParts("package", requireContext().getPackageName(), null);
+                intent.setData(uri);
+                requireContext().startActivity(intent);
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(),
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        1);
+            }
+        }
     }
 }
