@@ -8,9 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.edu.androidproject.data.datasource.SettingsSource;
 
 import java.util.List;
+import java.util.Map;
 
 public class SettingsRepo {
-    private final MutableLiveData<List<String>> settings = new MutableLiveData<>();
+    private final MutableLiveData<Map<String, String>> settings = new MutableLiveData<>();
     private final SettingsSource source;
 
     public SettingsRepo(Application application) {
@@ -18,10 +19,10 @@ public class SettingsRepo {
         settings.setValue(source.getSettings());
     }
 
-    public LiveData<List<String>> getSettings() { return settings; }
+    public LiveData<Map<String, String>> getSettings() { return settings; }
 
-    public void add(String record) {
-        source.add(record);
+    public void set(String setting, String value) {
+        source.set(setting, value);
         settings.setValue(source.getSettings());
     }
 
@@ -30,7 +31,7 @@ public class SettingsRepo {
         settings.setValue(source.getSettings());
     }
 
-    public void init(List<String> lines) {
+    public void init(Map<String, String> lines) {
         source.init(lines);
         settings.setValue(source.getSettings());
     }

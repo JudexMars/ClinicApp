@@ -1,6 +1,8 @@
 package com.edu.androidproject.data.datasource;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,63 +12,38 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SettingsSource {
-
-    File file;
+    SharedPreferences config;
 
     public SettingsSource(Application application) {
-        file = new File(application.getApplicationContext().getFilesDir(),
-                "user_specific.txt");
+       config = application.getApplicationContext()
+               .getSharedPreferences("config", Context.MODE_PRIVATE);
     }
 
-    public List<String> getSettings() {
-        List<String> settings = new ArrayList<>();
-
-        if (file.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                settings.addAll(reader.lines().collect(Collectors.toList()));
-            }
-            catch (IOException e) {
-                throw new RuntimeException("IOException in settings source class getSettings()");
-            }
-        }
-
-        return settings;
+    @SuppressWarnings("unchecked")
+    public Map<String, String> getSettings() {
+        // конфиг предназначен исключительно для хранения строковых значений и все его методы
+        // позволяют записывать и получать только строки, поэтому этот cast уместен
+        return (Map<String, String>) config.getAll();
     }
 
-    public void add(String setting) {
-        try (Writer writer = new FileWriter(file, file.exists())) {
-            writer.write(setting);
-            writer.write("\n");
-        }
-        catch (IOException e) {
-            throw new RuntimeException("IOException in settings source class getSettings()");
-        }
+    public void set(String setting, String value) {
+        config.edit().putString(setting, value).apply();
     }
 
     public void remove(String setting) {
-        if (!file.exists()) return;
-
-        List<String> temp = getSettings()
-                .stream()
-                .filter(s -> !s.equals(setting))
-                .collect(Collectors.toList());
-
-        init(temp);
+        config.edit().remove(setting).apply();
     }
 
-
-    public void init(List<String> lines) {
-        try (Writer writer = new FileWriter(file)) {
-            for (String line : lines) {
-                writer.write(line);
-                writer.write("\n");
-            }
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Init failed in settings source class");
-        }
+    public String get(String setting) {
+        return config.getString(setting, "");
+    }
+    public void init(Map<String, String> lines) {
+        SharedPreferences.Editor editor = config.edit();
+        lines.forEach(editor::putString);
+        editor.apply();
     }
 }

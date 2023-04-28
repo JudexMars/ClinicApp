@@ -37,6 +37,7 @@ import com.edu.androidproject.ui.viewmodels.UserAccountsViewModel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -111,10 +112,10 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
         if (!checkPermission()) requestPermission();
 
         if (firstLaunch) {
-            List<String> settings = settingsViewModel.getSettings().getValue();
+            Map<String, String> settings = settingsViewModel.getSettings().getValue();
 
-            String rememberedUsername = settings.get(0);
-            String rememberedPassword = settings.get(1);
+            String rememberedUsername = settings.get("username");
+            String rememberedPassword = settings.get("password");
 
             binding.usernameText.setText(rememberedUsername);
             binding.passwordText.setText(rememberedPassword);
@@ -152,11 +153,8 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                         String rememberedUserName = binding.usernameText.getText().toString();
                         String rememberedPassword = binding.passwordText.getText().toString();
 
-                        List<String> tmp = new ArrayList<String>();
-                        tmp.add(rememberedUserName);
-                        tmp.add(rememberedPassword);
-
-                        settingsViewModel.init(tmp);
+                        settingsViewModel.set("username", rememberedUserName);
+                        settingsViewModel.set("password", rememberedPassword);
                     }
 
                     if (checkPermission()) {

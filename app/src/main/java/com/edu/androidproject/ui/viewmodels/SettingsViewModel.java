@@ -8,9 +8,10 @@ import androidx.lifecycle.LiveData;
 import com.edu.androidproject.data.repository.SettingsRepo;
 
 import java.util.List;
+import java.util.Map;
 
 public class SettingsViewModel extends AndroidViewModel {
-    private final LiveData<List<String>> settings;
+    private final LiveData<Map<String, String>> settings;
     private final SettingsRepo repo;
 
     public SettingsViewModel(Application application) {
@@ -19,12 +20,12 @@ public class SettingsViewModel extends AndroidViewModel {
         settings = repo.getSettings();
     }
 
-    public LiveData<List<String>> getSettings() {
+    public LiveData<Map<String, String>> getSettings() {
         return settings;
     }
-    public void add(String record) { repo.add(record); }
+    public void set(String setting, String value) { repo.set(setting, value); }
     public void remove(String key) {
         repo.remove(key);
     }
-    public void init(List<String> lines) { repo.init(lines); }
+    public void init(Map<String, String> lines) { repo.init(lines); }
 }
