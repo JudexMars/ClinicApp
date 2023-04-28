@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.edu.androidproject.R;
 import com.edu.androidproject.data.model.UserAccount;
 import com.edu.androidproject.databinding.FragmentLoginScreenBinding;
+import com.edu.androidproject.ui.viewmodels.SettingsViewModel;
 import com.edu.androidproject.ui.viewmodels.UserAccountsViewModel;
 
 import java.io.BufferedReader;
@@ -43,8 +44,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.security.Permissions;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -54,12 +57,14 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
     private static final String TAG = "Login screen";
     private FragmentLoginScreenBinding binding;
     UserAccountsViewModel userAccountsViewModel;
+    SettingsViewModel settingsViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         userAccountsViewModel = new ViewModelProvider(this).get(UserAccountsViewModel.class);
+        settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
         getParentFragmentManager().setFragmentResultListener("userData",
                 this, (requestKey, result) -> {
@@ -116,11 +121,10 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
         if (!checkPermission()) requestPermission();
 
         if (firstLaunch) {
-            SharedPreferences config = getContext()
-                    .getSharedPreferences("config", Context.MODE_PRIVATE);
+            List<String> settings = settingsViewModel.getSettings().getValue();
 
-            String rememberedUsername = config.getString("username", "");
-            String rememberedPassword = config.getString("password", "");
+            String rememberedUsername = settings.get(0);
+            String rememberedPassword = settings.get(1);
 
             binding.usernameText.setText(rememberedUsername);
             binding.passwordText.setText(rememberedPassword);
@@ -158,12 +162,11 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                         String rememberedUserName = binding.usernameText.getText().toString();
                         String rememberedPassword = binding.passwordText.getText().toString();
 
-                        SharedPreferences config = getActivity()
-                                .getSharedPreferences("config", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = config.edit();
-                        editor.putString("username", rememberedUserName);
-                        editor.putString("password", rememberedPassword);
-                        editor.apply();
+                        List<String> tmp = new ArrayList<String>();
+                        tmp.add(rememberedUserName);
+                        tmp.add(rememberedPassword);
+
+                        settingsViewModel.init(tmp);
                     }
 
                     if (checkPermission()) {
