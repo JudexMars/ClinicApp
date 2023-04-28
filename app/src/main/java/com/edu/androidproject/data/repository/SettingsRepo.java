@@ -5,16 +5,13 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.edu.androidproject.data.datasource.ApptsSource;
 import com.edu.androidproject.data.datasource.SettingsSource;
-import com.edu.androidproject.data.model.Appointment;
 
 import java.util.List;
-import java.util.Map;
 
 public class SettingsRepo {
-    private MutableLiveData<List<String>> settings;
-    private SettingsSource source;
+    private final MutableLiveData<List<String>> settings = new MutableLiveData<>();
+    private final SettingsSource source;
 
     public SettingsRepo(Application application) {
         source = new SettingsSource(application);

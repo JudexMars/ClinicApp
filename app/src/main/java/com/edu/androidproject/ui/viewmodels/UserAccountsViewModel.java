@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.edu.androidproject.data.model.UserAccount;
 import com.edu.androidproject.data.repository.UserAccountsRepo;

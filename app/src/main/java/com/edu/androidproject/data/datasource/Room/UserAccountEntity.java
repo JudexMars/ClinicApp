@@ -7,8 +7,6 @@ import androidx.room.PrimaryKey;
 
 import com.edu.androidproject.data.model.UserAccount;
 
-import java.util.Date;
-
 @Entity(tableName = "account_table")
 public class UserAccountEntity {
     private String name;

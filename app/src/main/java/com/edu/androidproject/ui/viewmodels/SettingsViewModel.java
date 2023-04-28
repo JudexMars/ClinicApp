@@ -5,12 +5,9 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.edu.androidproject.data.model.Appointment;
-import com.edu.androidproject.data.repository.ApptsRepo;
 import com.edu.androidproject.data.repository.SettingsRepo;
 
 import java.util.List;
-import java.util.Map;
 
 public class SettingsViewModel extends AndroidViewModel {
     private final LiveData<List<String>> settings;

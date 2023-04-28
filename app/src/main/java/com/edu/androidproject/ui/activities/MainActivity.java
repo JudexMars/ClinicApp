@@ -1,10 +1,10 @@
 package com.edu.androidproject.ui.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.edu.androidproject.R;
 import com.edu.androidproject.databinding.ActivityMainBinding;

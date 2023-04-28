@@ -1,14 +1,7 @@
 package com.edu.androidproject.data.datasource;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-
-import com.edu.androidproject.data.model.Appointment;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,7 +10,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SettingsSource {

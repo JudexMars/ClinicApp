@@ -1,6 +1,5 @@
 package com.edu.androidproject.data.datasource;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.edu.androidproject.data.model.Appointment;

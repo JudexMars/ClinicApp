@@ -3,15 +3,12 @@ package com.edu.androidproject.ui.fragments;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,24 +30,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.edu.androidproject.R;
 import com.edu.androidproject.data.model.UserAccount;
 import com.edu.androidproject.databinding.FragmentLoginScreenBinding;
+import com.edu.androidproject.ui.viewmodels.LogsViewModel;
 import com.edu.androidproject.ui.viewmodels.SettingsViewModel;
 import com.edu.androidproject.ui.viewmodels.UserAccountsViewModel;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.security.Permissions;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 public class LoginScreenFragment extends Fragment implements LifecycleObserver {
 
@@ -58,6 +46,7 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
     private FragmentLoginScreenBinding binding;
     UserAccountsViewModel userAccountsViewModel;
     SettingsViewModel settingsViewModel;
+    LogsViewModel logsViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +54,7 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
 
         userAccountsViewModel = new ViewModelProvider(this).get(UserAccountsViewModel.class);
         settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+        logsViewModel = new ViewModelProvider(this).get(LogsViewModel.class);
 
         getParentFragmentManager().setFragmentResultListener("userData",
                 this, (requestKey, result) -> {
@@ -170,17 +160,7 @@ public class LoginScreenFragment extends Fragment implements LifecycleObserver {
                     }
 
                     if (checkPermission()) {
-                        File file = new File(Environment
-                                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                                "ClinicExample.txt");
-                        Date currentDate = new Date();
-                        try (Writer writer = new FileWriter(file)) {
-                            writer.write("Last login:");
-                            writer.write(currentDate.toString());
-                        }
-                        catch (IOException e) {
-                            Log.w(TAG, "IOException when writing external file");
-                        }
+                        logsViewModel.add("Login: " + new Date());
                     }
                     else {
                         Log.w(TAG, "No external write permission");
